@@ -121,7 +121,7 @@ export const DICTIONARY = {
 
 export const THEMES = [
   { id: 'slate', color: '#334155', bg: '#020617', sidebar: '#0f172a', text: '#f8fafc', textMuted: '#94a3b8', accent: '#3b82f6', border: '#1e293b' },
-  { id: 'total-black', color: '#000000', bg: '#000000', sidebar: '#0a0a0a', text: '#ffffff', textMuted: '#737373', accent: '#ffffff', border: '#262626' },
+  { id: 'total-black', color: '#000000', bg: '#000000', sidebar: '#0a0a0a', text: '#ffffff', textMuted: '#a3a3a3', accent: '#ffffff', border: '#262626' },
   { id: 'light', color: '#e2e8f0', bg: '#ffffff', sidebar: '#f8fafc', text: '#0f172a', textMuted: '#64748b', accent: '#2563eb', border: '#e2e8f0' },
   { id: 'sepia', color: '#d4c4a8', bg: '#fdf6e3', sidebar: '#eee8d5', text: '#475569', textMuted: '#94a3b8', accent: '#d33682', border: '#e5e7eb' },
   { id: 'forest', color: '#166534', bg: '#052e16', sidebar: '#14532d', text: '#ecfdf5', textMuted: '#6ee7b7', accent: '#22c55e', border: '#166534' },

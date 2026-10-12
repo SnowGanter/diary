@@ -1,4 +1,10 @@
 export function appearanceCSS(activeThemeData, activeFontData, activeFontSizeData, t) {
+  const luminance = hex => {
+    const channels = hex.replace('#', '').match(/.{2}/g).map(value => parseInt(value, 16) / 255).map(value => value <= .04045 ? value / 12.92 : ((value + .055) / 1.055) ** 2.4);
+    return channels[0] * .2126 + channels[1] * .7152 + channels[2] * .0722;
+  };
+  const accentLight = luminance(activeThemeData.accent);
+  const accentText = (accentLight + .05) / .05 > 1.05 / (accentLight + .05) ? '#000' : '#fff';
   return `
     :root {
       --bg-main: ${activeThemeData.bg};
@@ -6,6 +12,8 @@ export function appearanceCSS(activeThemeData, activeFontData, activeFontSizeDat
       --text-main: ${activeThemeData.text};
       --text-muted: ${activeThemeData.textMuted};
       --accent: ${activeThemeData.accent};
+      --accent-text: ${accentText};
+      color-scheme: ${luminance(activeThemeData.bg) < .18 ? 'dark' : 'light'};
       --border: ${activeThemeData.border};
       --font-main: ${activeFontData.family};
       --font-size-base: ${activeFontSizeData.size};
@@ -26,7 +34,7 @@ export function appearanceCSS(activeThemeData, activeFontData, activeFontSizeDat
     .app-border { border-color: var(--border); }
     .app-text { color: var(--text-main); }
     .app-text-muted { color: var(--text-muted); }
-    .app-accent-bg { background-color: var(--accent); color: ${activeThemeData.id === 'total-black' ? '#000' : '#fff'}; }
+    .app-accent-bg, .workspace button.app-accent-bg { background-color: var(--accent); color: var(--accent-text); }
     .app-accent-text { color: var(--accent); }
     .app-hover-bg:hover { background-color: var(--bg-main); }
 
@@ -37,14 +45,14 @@ export function appearanceCSS(activeThemeData, activeFontData, activeFontSizeDat
     .wysiwyg-editor .has-placeholder:empty:before,
     .wysiwyg-editor .has-placeholder:has(> br:only-child):before {
       content: attr(data-placeholder);
-      color: var(--text-muted); opacity: 0.5; pointer-events: none; display: inline-block;
+      color: var(--text-muted); opacity: 1; pointer-events: none; display: inline-block;
       font-weight: normal; position: absolute; white-space: nowrap; overflow: hidden; max-width: 100%;
     }
 
     .wysiwyg-editor > h1:first-child:empty:before,
     .wysiwyg-editor > h1:first-child:has(> br:only-child):before {
         content: var(--ph-title);
-        position: absolute; color: var(--text-muted); opacity: 0.5; pointer-events: none; font-weight: inherit;
+        position: absolute; color: var(--text-muted); opacity: 1; pointer-events: none; font-weight: inherit;
     }
 
     .wysiwyg-editor > h1:first-child + p:last-child:empty:before,
@@ -52,13 +60,13 @@ export function appearanceCSS(activeThemeData, activeFontData, activeFontSizeDat
     .wysiwyg-editor > p:first-child:last-child:empty:before,
     .wysiwyg-editor > p:first-child:last-child:has(> br:only-child):before {
         content: var(--ph-subtitle);
-        position: absolute; color: var(--text-muted); opacity: 0.35; pointer-events: none; white-space: nowrap; overflow: hidden; max-width: 100%;
+        position: absolute; color: var(--text-muted); opacity: 1; pointer-events: none; white-space: nowrap; overflow: hidden; max-width: 100%;
     }
 
     .wysiwyg-editor:empty:before,
     .wysiwyg-editor:has(> br:only-child):before {
         content: var(--ph-empty);
-        position: absolute; color: var(--text-muted); opacity: 0.35; pointer-events: none;
+        position: absolute; color: var(--text-muted); opacity: 1; pointer-events: none;
     }
 
     .wysiwyg-editor h1 { font-size: 2.25em; font-weight: bold; margin-bottom: 0.5em; margin-top: 0.7em; color: var(--text-main); line-height: 1.2; }
