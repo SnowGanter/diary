@@ -1,0 +1,12 @@
+import { spawn } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
+import { createRequire } from 'node:module';
+const require=createRequire(import.meta.url);
+const root=path.resolve('.test-data','native');fs.mkdirSync(root,{recursive:true});
+const result=path.join(root,`result-${Date.now()}.json`);
+const env={...process.env,DIARY_PROFILE:path.join(root,'profile'),DIARY_WORKSPACE:path.join(root,'workspace'),DIARY_TEST_RESULT:result};delete env.ELECTRON_RUN_AS_NODE;
+const child=spawn(require('electron'),['tests/electron-smoke.cjs'],{env,windowsHide:true,stdio:'pipe'});
+let logs='';child.stdout.on('data',data=>{logs+=data;});child.stderr.on('data',data=>{logs+=data;});
+const timer=setTimeout(()=>{child.kill();},35000);
+child.on('exit',()=>{clearTimeout(timer);try{const check=JSON.parse(fs.readFileSync(result,'utf8'));console.log(check.detail);process.exitCode=check.ok?0:1;}catch{console.error(logs.slice(-3000));process.exitCode=1;}});
